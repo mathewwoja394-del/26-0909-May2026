@@ -19,7 +19,29 @@ body {
     text-align: center;
 }
 
-/* ===== HEADER ===== */
+<!-- ===== FATHER'S DAY WELCOME POPUP ===== -->
+<div class="popup-overlay" id="welcomePopup">
+    <div class="popup-box">
+        <button class="popup-close" onclick="closePopup()" aria-label="Close">✕</button>
+        <div class="popup-badge">🎉 Limited Time Offer</div>
+        <div class="popup-discount"><span>30%</span> OFF</div>
+        <h2>👨 HAPPY FATHER'S DAY!</h2>
+        <p class="popup-subtitle">
+            Celebrate the dads in your life with a special Father's Day fitness gift.
+            Train together, grow stronger — this June only!
+        </p>
+        <div class="popup-promo">
+            <p>Use promo code at booking:</p>
+            <div class="promo-code">DAD2026</div>
+            <p>30% off all packages for Dads &amp; Dad-Duos this month</p>
+        </div>
+        <p class="popup-timer" id="offerTimer">⏳ Offer ends in: calculating...</p>
+        <button class="popup-btn" onclick="claimOffer()">Claim My Discount →</button>
+        <span class="popup-skip" onclick="closePopup()">No thanks, I'll pay full price</span>
+    </div>
+</div>
+    
+    /* ===== HEADER ===== */
 header {
     background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)),
                 url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1400&q=80') center/cover no-repeat;
@@ -924,7 +946,90 @@ footer span { color: #f0a500; font-weight: 700; }
 
 <hr>
 
-<!-- CONTACT -->
+<!-- BOOK AN APPOINTMENT -->
+<section id="booking">
+    <h2>📅 Book an Appointment</h2>
+    <p>Reserve your session with Matthew — it takes less than a minute</p>
+
+    <div class="booking-box">
+        <h3>🗓️ Your Details</h3>
+        <p class="booking-intro">Fill in the form below and Matthew will confirm your slot within 24 hours.</p>
+
+        <div class="booking-row">
+            <div class="booking-field">
+                <label for="b-firstname">First Name</label>
+                <input type="text" id="b-firstname" placeholder="e.g. James">
+            </div>
+            <div class="booking-field">
+                <label for="b-lastname">Last Name</label>
+                <input type="text" id="b-lastname" placeholder="e.g. Mwangi">
+            </div>
+        </div>
+
+        <div class="booking-field">
+            <label for="b-email">Email Address</label>
+            <input type="email" id="b-email" placeholder="e.g. james@email.com">
+        </div>
+
+        <div class="booking-field">
+            <label for="b-phone">Phone Number</label>
+            <input type="tel" id="b-phone" placeholder="e.g. +254 712 345 678">
+        </div>
+
+        <div class="booking-row">
+            <div class="booking-field">
+                <label for="b-nationality">Nationality</label>
+                <input type="text" id="b-nationality" placeholder="e.g. Kenyan">
+            </div>
+            <div class="booking-field">
+                <label for="b-gender">Gender</label>
+                <div class="select-wrap">
+                    <select id="b-gender">
+                        <option value="" disabled selected>Select gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="nonbinary">Non-binary</option>
+                        <option value="prefer-not">Prefer not to say</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="booking-row">
+            <div class="booking-field">
+                <label for="b-date">Preferred Date</label>
+                <input type="date" id="b-date">
+            </div>
+            <div class="booking-field">
+                <label for="b-service">Service</label>
+                <div class="select-wrap">
+                    <select id="b-service">
+                        <option value="" disabled selected>Choose a service</option>
+                        <option>Marathon Training</option>
+                        <option>Strength Training</option>
+                        <option>Nutrition Coaching</option>
+                        <option>Online Coaching</option>
+                        <option>Recovery &amp; Yoga</option>
+                        <option>Group Sessions</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="booking-field">
+            <label for="b-promo">Promo Code (optional)</label>
+            <input type="text" id="b-promo" placeholder="e.g. DAD2026">
+        </div>
+
+        <button class="booking-submit" onclick="submitBooking()">Confirm Appointment →</button>
+        <div id="booking-success">✅ Booking received! Matthew will contact you within 24 hours.</div>
+    </div>
+</section>
+
+<hr>
+
+    
+    <!-- CONTACT -->
 <section id="contact" class="contact-form">
     <h2>📞 Contact Matthew</h2>
     <p>Ready to start your fitness journey? Get in touch today!</p>
