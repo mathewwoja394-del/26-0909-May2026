@@ -492,72 +492,6 @@ footer span { color: #f0a500; font-weight: 700; }
             </div>
         </div>
 
-        <!-- FITNESS DETAILS -->
-        <div class="reg-divider">Fitness Details</div>
-
-        <div class="reg-row">
-            <div class="reg-field">
-                <label for="r-level">Fitness Level *</label>
-                <select id="r-level">
-                    <option value="" disabled selected>Select your level</option>
-                    <option>Complete Beginner</option>
-                    <option>Some Experience</option>
-                    <option>Intermediate</option>
-                    <option>Advanced</option>
-                    <option>Elite / Competitive</option>
-                </select>
-            </div>
-            <div class="reg-field">
-                <label for="r-program">Interested Program *</label>
-                <select id="r-program">
-                    <option value="" disabled selected>Choose a program</option>
-                    <option>Beginner 5K</option>
-                    <option>Half Marathon</option>
-                    <option>Full Marathon</option>
-                    <option>Fat Burn 30-Day</option>
-                    <option>Muscle Builder</option>
-                    <option>Speed &amp; Agility</option>
-                    <option>Nutrition Coaching</option>
-                    <option>Online Coaching</option>
-                    <option>Group Sessions</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="reg-field">
-            <label>Training Days Available (select all that apply) *</label>
-            <div class="reg-checkbox-group">
-                <label><input type="checkbox" value="Mon"> Monday</label>
-                <label><input type="checkbox" value="Tue"> Tuesday</label>
-                <label><input type="checkbox" value="Wed"> Wednesday</label>
-                <label><input type="checkbox" value="Thu"> Thursday</label>
-                <label><input type="checkbox" value="Fri"> Friday</label>
-                <label><input type="checkbox" value="Sat"> Saturday</label>
-                <label><input type="checkbox" value="Sun"> Sunday</label>
-            </div>
-        </div>
-
-        <div class="reg-row">
-            <div class="reg-field">
-                <label for="r-weight">Current Weight (kg)</label>
-                <input type="number" id="r-weight" placeholder="e.g. 75" min="1">
-            </div>
-            <div class="reg-field">
-                <label for="r-height">Height (cm)</label>
-                <input type="number" id="r-height" placeholder="e.g. 175" min="1">
-            </div>
-        </div>
-
-        <div class="reg-field">
-            <label for="r-goal">Your Main Fitness Goal *</label>
-            <input type="text" id="r-goal" placeholder="e.g. Run my first marathon in under 4 hours">
-        </div>
-
-        <div class="reg-field">
-            <label for="r-medical">Any Medical Conditions or Injuries? (optional)</label>
-            <textarea id="r-medical" placeholder="e.g. Lower back pain, asthma — leave blank if none"></textarea>
-        </div>
-
         <!-- PROMO -->
         <div class="reg-divider">Promo Code</div>
 
@@ -693,9 +627,6 @@ function submitRegistration() {
     var email       = get('r-email').value.trim();
     var phone       = get('r-phone').value.trim();
     var city        = get('r-city').value.trim();
-    var level       = get('r-level').value;
-    var program     = get('r-program').value;
-    var goal        = get('r-goal').value.trim();
     var terms       = get('r-terms').checked;
 
     // Validate required fields
@@ -708,13 +639,6 @@ function submitRegistration() {
     if (!email)       missing.push('Email Address');
     if (!phone)       missing.push('Phone Number');
     if (!city)        missing.push('City / Town');
-    if (!level)       missing.push('Fitness Level');
-    if (!program)     missing.push('Interested Program');
-    if (!goal)        missing.push('Fitness Goal');
-
-    // Check at least one training day selected
-    var days = document.querySelectorAll('.reg-checkbox-group input[type="checkbox"]:checked');
-    if (days.length === 0) missing.push('Training Days');
 
     if (missing.length > 0) {
         alert('⚠️ Please fill in the following required fields:\n\n• ' + missing.join('\n• '));
@@ -729,30 +653,21 @@ function submitRegistration() {
         alert('⚠️ Please agree to the Terms & Conditions to complete registration.'); return;
     }
 
-    var selectedDays = Array.from(days).map(function(d) { return d.value; }).join(', ');
-
     var success = get('reg-success');
     success.style.display = 'block';
     success.innerHTML =
         '🎉 Welcome to Matthew Fitness, <strong>' + firstName + '!</strong><br><br>' +
         '✅ Your registration has been received.<br>' +
-        '📋 Program: <strong>' + program + '</strong><br>' +
-        '📅 Training days: <strong>' + selectedDays + '</strong><br>' +
         '📧 Confirmation will be sent to <strong>' + email + '</strong><br><br>' +
         'Matthew will contact you within 24 hours. Train hard! 💪';
 
     // Clear all fields
     ['r-firstname','r-lastname','r-dob','r-nationality','r-idno','r-email',
-     'r-phone','r-city','r-goal','r-medical','r-weight','r-height','r-promo'].forEach(function(id) {
+     'r-phone','r-city','r-promo'].forEach(function(id) {
         get(id).value = '';
     });
     get('r-gender').selectedIndex  = 0;
-    get('r-level').selectedIndex   = 0;
-    get('r-program').selectedIndex = 0;
     get('r-terms').checked = false;
-    document.querySelectorAll('.reg-checkbox-group input[type="checkbox"]').forEach(function(cb) {
-        cb.checked = false;
-    });
 
     success.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
