@@ -481,7 +481,7 @@ footer span { color: #f0a500; font-weight: 700; }
         <div class="reg-divider">Contact Details</div>
 
         <div class="reg-field">
-            <label for="r-email">Email Address *</label>
+            <label for="r-email">Email *</label>
             <input type="email" id="r-email" placeholder="e.g. james@email.com">
         </div>
 
@@ -531,7 +531,7 @@ footer span { color: #f0a500; font-weight: 700; }
     <h3>Send Matthew a Message</h3>
     <form onsubmit="return false;">
         <input type="text" placeholder="Your Full Name"><br>
-        <input type="email" placeholder="Your Email Address"><br>
+        <input type="email" placeholder="Your Email"><br>
         <input type="text" placeholder="Your Fitness Goal (e.g. Run a Marathon)"><br>
         <textarea rows="5" placeholder="Your Message..."></textarea><br>
         <button type="submit">Send Message</button>
@@ -652,7 +652,7 @@ async function submitRegistration() {
     if (!dob)         missing.push('Date of Birth');
     if (!gender)      missing.push('Gender');
     if (!nationality) missing.push('Nationality');
-    if (!email)       missing.push('Email Address');
+    if (!email)       missing.push('Email');
     if (!phone)       missing.push('Phone Number');
     if (!city)        missing.push('City / Town');
 
@@ -662,7 +662,7 @@ async function submitRegistration() {
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        alert('⚠️ Please enter a valid email address.'); return;
+        alert('⚠️ Please enter a valid email.'); return;
     }
 
     if (!terms) {
@@ -675,7 +675,7 @@ async function submitRegistration() {
 
     // Row mapped to the "registration" table columns
     var row = {
-        full_name: firstName,
+        first_name: firstName,
         last_name: lastName,
         email: email,
         nationality: nationality,
