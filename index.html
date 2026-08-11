@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Matthew Fitness</title>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<!-- Supabase JS client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 
 /* ===== GENERAL ===== */
@@ -159,7 +161,9 @@ footer span { color: #f0a500; font-weight: 700; }
 .reg-terms a:hover { text-decoration: underline; }
 .reg-submit { width: 100%; background: #f0a500; color: #0d0d0d; border: none; padding: 15px; border-radius: 30px; font-family: 'Oswald', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; margin-top: 4px; transition: background 0.3s; }
 .reg-submit:hover { background: #ffbe33; }
+.reg-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 #reg-success { display: none; margin-top: 20px; padding: 18px; background: rgba(240,165,0,0.1); border: 1px solid #f0a500; border-radius: 12px; font-family: 'Oswald', sans-serif; color: #f0a500; font-size: 17px; letter-spacing: 1px; text-align: center; line-height: 1.7; }
+#reg-error { display: none; margin-top: 20px; padding: 18px; background: rgba(231,76,60,0.1); border: 1px solid #e74c3c; border-radius: 12px; font-family: 'Oswald', sans-serif; color: #e74c3c; font-size: 15px; letter-spacing: 1px; text-align: center; line-height: 1.7; }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
@@ -506,8 +510,9 @@ footer span { color: #f0a500; font-weight: 700; }
             <label for="r-terms">I agree to the <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a>. I confirm that the information I have provided is accurate.</label>
         </div>
 
-        <button class="reg-submit" onclick="submitRegistration()">Complete Registration →</button>
+        <button class="reg-submit" id="reg-submit-btn" onclick="submitRegistration()">Complete Registration →</button>
         <div id="reg-success"></div>
+        <div id="reg-error"></div>
     </div>
 </section>
 
@@ -545,6 +550,11 @@ footer span { color: #f0a500; font-weight: 700; }
 
 <!-- ===== JAVASCRIPT ===== -->
 <script>
+
+// ===== SUPABASE SETUP =====
+const SUPABASE_URL = 'https://vndrjmgtdjqxovlhjsjw.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_M5gJu-5DV6uKn_jcIMclmg_JbdydfDj';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ===== FATHER'S DAY POPUP =====
 (function () {
@@ -615,8 +625,8 @@ function playWorkoutBeep() {
     });
 }
 
-// ===== REGISTRATION FORM =====
-function submitRegistration() {
+// ===== REGISTRATION FORM (Supabase insert) =====
+async function submitRegistration() {
     var get = function(id) { return document.getElementById(id); };
 
     var firstName   = get('r-firstname').value.trim();
@@ -624,10 +634,16 @@ function submitRegistration() {
     var dob         = get('r-dob').value;
     var gender      = get('r-gender').value;
     var nationality = get('r-nationality').value.trim();
+    var idNumber    = get('r-idno').value.trim();
     var email       = get('r-email').value.trim();
     var phone       = get('r-phone').value.trim();
     var city        = get('r-city').value.trim();
     var terms       = get('r-terms').checked;
+
+    var successBox = get('reg-success');
+    var errorBox   = get('reg-error');
+    successBox.style.display = 'none';
+    errorBox.style.display = 'none';
 
     // Validate required fields
     var missing = [];
@@ -653,9 +669,41 @@ function submitRegistration() {
         alert('⚠️ Please agree to the Terms & Conditions to complete registration.'); return;
     }
 
-    var success = get('reg-success');
-    success.style.display = 'block';
-    success.innerHTML =
+    var submitBtn = get('reg-submit-btn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
+    // Row mapped to the "registration" table columns
+    var row = {
+        full_name: firstName,
+        last_name: lastName,
+        email: email,
+        nationality: nationality,
+        gender: gender,
+        phone_number: phone,
+        'city/town': city,
+        date_of_birth: dob,
+        passport_number: idNumber || null
+    };
+
+    var { data, error } = await supabaseClient
+        .from('registration')
+        .insert([row])
+        .select();
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Complete Registration →';
+
+    if (error) {
+        console.error('Supabase insert error:', error);
+        errorBox.style.display = 'block';
+        errorBox.innerHTML = '⚠️ Something went wrong saving your registration.<br><span style="font-size:13px;color:#f5b7b1;">' + (error.message || 'Please try again.') + '</span>';
+        errorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
+
+    successBox.style.display = 'block';
+    successBox.innerHTML =
         '🎉 Welcome to Matthew Fitness, <strong>' + firstName + '!</strong><br><br>' +
         '✅ Your registration has been received.<br>' +
         '📧 Confirmation will be sent to <strong>' + email + '</strong><br><br>' +
@@ -669,7 +717,7 @@ function submitRegistration() {
     get('r-gender').selectedIndex  = 0;
     get('r-terms').checked = false;
 
-    success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 </script>
